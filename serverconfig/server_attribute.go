@@ -23,7 +23,8 @@ func (s *serverAttribute) Init() (err error) {
 			Username(s.config.PostgresSql.Username).
 			MaxIdleConnection(s.config.PostgresSql.MaxIdleConnection).
 			MaxOpenConnection(s.config.PostgresSql.MaxOpenConnection).
-			DefaultSchema(s.config.PostgresSql.DefaultSchema),
+			DefaultSchema(s.config.PostgresSql.DefaultSchema).
+			SetDriver("pgx"),
 	)
 
 	//Connection Redis

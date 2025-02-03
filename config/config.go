@@ -38,7 +38,7 @@ type PostgresSQL struct {
 	Username          string `envconfig:"username"`
 	Password          string `envconfig:"password"`
 	DBName            string `envconfig:"dbname"`
-	DefaultSchema     string `envconfig:"default-schema"`
+	DefaultSchema     string `envconfig:"default_schema"`
 	SslMode           string `envconfig:"ssl-mode" default:"disable"`
 	MaxOpenConnection int    `envconfig:"max_open_connection" default:"50"`
 	MaxIdleConnection int    `envconfig:"max_idle_connection" default:"10"`
