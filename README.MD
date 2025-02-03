@@ -42,16 +42,29 @@ CREATE DATABASE oauth_db;
 Create a `.env` file in the root directory and update the database credentials:
 ```
 DB_HOST=localhost
-DB_USER=postgres
-DB_PASSWORD=yourpassword
-DB_NAME=oauth_db
-DB_PORT=5432
-JWT_SECRET=your_secret_key
+DB_USER=oauth
+DB_PASSWORD=P@ssw0rd
+DB_NAME=oauth
+DB_PORT=5442
+JWT_SECRET=f0972a20ea7f1f23f863e99314c70c3d0525c17000ea56cc8b6044f555262444
+JWT_REFRESH_SECRET=5a5b1f1174e0d629cba2daf895b03146edd4134092e89824cf87ce0162714b12
 ```
 
 ---
 
 ## **4. Run the Application**
+### **Docker Compose Up**
+````sh
+docker-compose up -d
+````
+
+### **Expected Output**
+```
+[+] Running 2/2
+ ✔ Network login-oauth_default  Created                                                                                                                                                                                                                                                                        0.1s 
+ ✔ Container postgres_oauth     Started 
+```
+
 ### **Start the Server**
 ```sh
 go run main.go
@@ -60,16 +73,31 @@ go run main.go
 ### **Expected Output**
 ```
 Database connected successfully
-[GIN-debug] Listening and serving HTTP on :8080
+Database migration completed successfully!
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:   export GIN_MODE=release
+ - using code:  gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] POST   /auth/register            --> github.com/okiprianto23/login-oauth/controllers.Register (3 handlers)
+[GIN-debug] POST   /auth/token               --> github.com/okiprianto23/login-oauth/controllers.Login (3 handlers)
+[GIN-debug] POST   /auth/refresh             --> github.com/okiprianto23/login-oauth/controllers.RefreshToken (3 handlers)
+[GIN-debug] GET    /protected/data           --> github.com/okiprianto23/login-oauth/routes.SetupRouter.func1 (4 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :9899
 ```
 
 ---
 
 ## **5. API Endpoints**
 ### **Authentication**
-| Method | Endpoint       | Description |
-|--------|---------------|-------------|
-| `POST` | `/auth/token` | Login and get JWT token |
+| Method | Endpoint         | Description             |
+|--------|------------------|-------------------------|
+| `POST` | `/auth/register` | Register user login     |
+| `POST` | `/auth/login`    | Login and get JWT token |
+| `POST` | `/auth/refresh`  | Refresh JWT token       |
 
 ### **Protected Routes**
 | Method | Endpoint          | Description |
@@ -83,12 +111,12 @@ Database connected successfully
 Use the following **cURL** request to log in:
 
 ```sh
-curl -X POST "http://localhost:8080/auth/token"      -H "Content-Type: application/json"      -d '{"username": "admin", "password": "password"}'
+curl -X POST "http://localhost:8080/auth/login"      -H "Content-Type: application/json"      -d '{"username": "admin", "password": "P@ssw0rd"}'
 ```
 #### **Response**
 ```json
 {
-  "token": "your_generated_jwt_token"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Mzg1NzEzNjYsInVzZXJuYW1lIjoiYWRtaW4ifQ.KIo7gYWWu9dcTE6XFdVqA9f3-LcA4Hi_TQQUaZGLKfs"
 }
 ```
 
